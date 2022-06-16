@@ -24,6 +24,14 @@ class Neighborhood(models.Model):
         neighborhood = cls.objects.get(id=id).delete()
         return neighborhood
 
+    @classmethod
+    def update_neighborhood(cls, obj):
+        neighborhood = cls.get_neighborhood(obj.id)
+        neighborhood.name = obj.name
+        neighborhood.location = obj.location
+        neighborhood.save()
+        return neighborhood
+
 
     def __str__(self):
         return self.location
