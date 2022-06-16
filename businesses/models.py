@@ -31,6 +31,14 @@ class Business(models.Model):
         business = cls.objects.get(id=id).delete()
         return business
 
+    @classmethod
+    def update_business(cls, obj):
+        business = cls.get_business(obj.id)
+        business.name = obj.name
+        business.neighborhood = obj.neighborhood
+        business.email = obj.email
+        business.save()
+        return business
 
 
 def __str__(self):
