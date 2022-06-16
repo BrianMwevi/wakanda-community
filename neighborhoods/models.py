@@ -19,5 +19,11 @@ class Neighborhood(models.Model):
         self.save()
         return self
 
+    @classmethod
+    def delete_neighborhood(cls, id):
+        neighborhood = cls.objects.get(id=id).delete()
+        return neighborhood
+
+
     def __str__(self):
         return self.location
