@@ -3,12 +3,8 @@ from django.contrib.auth.models import User
 from neighborhoods.models import Neighborhood
 
 
-# Create your models here.
-
-
 class Business(models.Model):
-    name = models.CharField(max_length=55, unique=True,
-                            blank=False, null=False)
+    name = models.CharField(max_length=55, unique=True)
     user = models.ForeignKey(
         User, related_name='owner', on_delete=models.CASCADE)
     neighborhood = models.ForeignKey(
