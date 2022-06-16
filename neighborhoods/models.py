@@ -10,6 +10,10 @@ class Neighborhood(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-   
+    @classmethod
+    def get_neighborhood(cls, id):
+        neighborhood = cls.objects.get(id=id)
+        return neighborhood
+
     def __str__(self):
         return self.location
