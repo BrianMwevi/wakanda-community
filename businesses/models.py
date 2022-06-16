@@ -26,7 +26,12 @@ class Business(models.Model):
         self.save()
         return self
 
-  
+    @classmethod
+    def delete_business(cls, id):
+        business = cls.objects.get(id=id).delete()
+        return business
+
+
 
 def __str__(self):
     return self.name
