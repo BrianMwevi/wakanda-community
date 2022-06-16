@@ -22,6 +22,10 @@ class Business(models.Model):
         business = cls.objects.get(id=id)
         return business
 
+    def create_business(self):
+        self.save()
+        return self
+
   
 
 def __str__(self):
