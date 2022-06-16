@@ -32,6 +32,10 @@ class Neighborhood(models.Model):
         neighborhood.save()
         return neighborhood
 
+    def update_occupants(self, occupants):
+        self.occupants += occupants
+        self.save()
+        return self
 
     def __str__(self):
         return self.location
