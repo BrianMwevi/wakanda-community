@@ -9,6 +9,7 @@ class Post(models.Model):
     post = models.TextField()
     comments = models.ManyToManyField(
         'Comment', related_name='comments', blank=True)
+    neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE)
     likes = models.ManyToManyField(
         User, related_name='post_likes', blank=True)
     posted_at = models.DateTimeField(auto_now_add=True)
