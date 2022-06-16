@@ -15,5 +15,9 @@ class Neighborhood(models.Model):
         neighborhood = cls.objects.get(id=id)
         return neighborhood
 
+    def create_neighborhood(self):
+        self.save()
+        return self
+
     def __str__(self):
         return self.location
