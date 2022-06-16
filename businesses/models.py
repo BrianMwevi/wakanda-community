@@ -3,6 +3,9 @@ from django.contrib.auth.models import User
 from neighborhoods.models import Neighborhood
 
 
+# Create your models here.
+
+
 class Business(models.Model):
     name = models.CharField(max_length=55, unique=True,
                             blank=False, null=False)
@@ -14,6 +17,12 @@ class Business(models.Model):
     established = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    @classmethod
+    def get_business(cls, id):
+        business = cls.objects.get(id=id)
+        return business
+
+  
 
 def __str__(self):
     return self.name
