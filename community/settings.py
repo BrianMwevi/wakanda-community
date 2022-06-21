@@ -1,20 +1,17 @@
 import dj_database_url
 from pathlib import Path
-import os
-from decouple import config, Csv
+from decouple import config
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 import django_heroku
 
 
-cloudinary.config(
-    cloud_name=config("CLOUD_NAME"),
-    api_key=config('API_KEY'),
-    api_secret=config("API_SECRET")
-
-)
-
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': config("CLOUD_NAME"),
+    'API_KEY': config('API_KEY'),
+    'API_SECRET': config("API_SECRET")
+}
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -28,7 +25,6 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-# ALLOWED_HOSTS = ['jango-galleria.herokuapp.com', 'localhost']
 # Application definition
 
 INSTALLED_APPS = [
@@ -39,14 +35,17 @@ INSTALLED_APPS = [
     'livereload',
     'django.contrib.staticfiles',
     'django.contrib.messages',
+    'cloudinary_storage',
     'cloudinary',
     'accounts.apps.AccountsConfig',
     'businesses.apps.BusinessesConfig',
     'neighborhoods.apps.NeighborhoodsConfig',
     'posts.apps.PostsConfig',
     "rest_framework",
-    'rest_framework_swagger',
-    'rest_framework.authtoken'
+    # 'rest_framework_swagger',
+    'rest_framework.authtoken',
+    "corsheaders",
+    'knox',
 
 
 ]
@@ -55,6 +54,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -65,8 +65,9 @@ MIDDLEWARE = [
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
+        # 'rest_framework.authentication.TokenAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
+        'knox.auth.TokenAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
@@ -151,16 +152,21 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
-
+MEDIA_URL = '/media/'
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Domains that can get access to the API
+CORS_ALLOWED_ORIGINS = [
+
+    "http://localhost:4200",
+    "https://wakanda-community.herokuapp.com",
+    "https://brianmwevi.github.io",
+]
 # Heroku: Update database configuration from $DATABASE_URL.
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
 django_heroku.settings(locals())
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())

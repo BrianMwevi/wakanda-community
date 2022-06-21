@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 class Neighborhood(models.Model):
     name = models.CharField(max_length=55)
     location = models.CharField(max_length=55)
-    occupants = models.IntegerField(default=1, blank=True, null=False)
+    occupants = models.ManyToManyField(User, related_name="occupants", blank=True)
     admin = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -38,4 +38,4 @@ class Neighborhood(models.Model):
         return self
 
     def __str__(self):
-        return self.location
+        return f"{self.id}"
